@@ -4,6 +4,19 @@
 
 ChainTix is a full-stack decentralized application for creating, purchasing, and managing event tickets on the Ethereum blockchain. No middlemen. No hidden fees. Full transparency.
 
+See [`OVERVIEW.md`](OVERVIEW.md) for a deep dive into the project — problem statement, architecture, and design decisions.
+
+## Screenshots
+
+### Landing Page
+![ChainTix Landing Page](screenshots/home-page.png)
+
+### Browse Events
+![Browse Events with Category Filtering](screenshots/trending-events.png)
+
+### Create Event
+![Create Event Form with Live Preview](screenshots/create-event.png)
+
 ## Features
 
 ### For Attendees
@@ -89,8 +102,13 @@ event-ticketing-dapp/
 │   ├── index.html
 │   ├── package.json
 │   └── vite.config.ts
+├── screenshots/
+│   ├── home-page.png              # Landing page screenshot
+│   ├── trending-events.png        # Event browsing screenshot
+│   └── create-event.png           # Create event screenshot
 ├── .env.example
 ├── foundry.toml
+├── OVERVIEW.md                     # Project deep dive & architecture
 ├── .github/
 │   └── workflows/
 │       └── test.yml                # CI: forge test on push

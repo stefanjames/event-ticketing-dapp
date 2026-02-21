@@ -1,5 +1,14 @@
 # ChainTix — Project Overview
 
+# Ouick Overview
+
+My event ticketing dApp uses NFT-based tickets with on-chain transfer restrictions and QR verification to eliminate counterfeiting and scalping. I built it to dig into token standards, access control patterns, and the security considerations around minting, ownership, and validation logic.
+
+## Security Focus:
+
+This project is my way of learning blockchain security from the builder's side understanding vulnerabilities like reentrancy, access control gaps, and input
+validation by writing the contracts myself and auditing them against real checklists like SWC and the Solidity security best practices.
+
 ## What is ChainTix?
 
 ChainTix is a decentralized event ticketing platform built on Ethereum. It replaces traditional ticketing intermediaries (Ticketmaster, Eventbrite, StubHub) with a smart contract that handles the entire ticket lifecycle — creation, purchase, transfer, refund, validation, and revenue withdrawal — directly on-chain.

@@ -2,6 +2,8 @@
 
 > Your Ticket. Your Wallet. Your Proof.
 
+**[Live App Demo](https://event-ticketing-onchain.vercel.app)**
+
 ChainTix is a full-stack decentralized application for creating, purchasing, and managing event tickets on the Ethereum blockchain. No middlemen. No hidden fees. Full transparency.
 
 See [`OVERVIEW.md`](OVERVIEW.md) for a deep dive into the project — problem statement, architecture, and design decisions.

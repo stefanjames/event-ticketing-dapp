@@ -3,7 +3,7 @@ import { parseEther } from 'ethers';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
-import { CalendarPlus, Loader2, Eye, MapPin, Calendar, Clock, Ticket, Info } from 'lucide-react';
+import { CalendarPlus, Loader2, Eye, MapPin, Calendar, Clock, Ticket, Info, ImagePlus, X } from 'lucide-react';
 import { useWalletContext } from '../components/wallet/WalletContext';
 import { parseContractError } from '../lib/contract';
 import { TransactionStatus } from '../components/ui/TransactionStatus';
@@ -17,6 +17,7 @@ export function CreateEventPage() {
   const navigate = useNavigate();
   const [txStep, setTxStep] = useState<TxStep | null>(null);
   const [txHash, setTxHash] = useState('');
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     name: '',
@@ -32,6 +33,14 @@ export function CreateEventPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => setImagePreview(reader.result as string);
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -68,6 +77,10 @@ export function CreateEventPage() {
         (log: { fragment?: { name: string } }) => log.fragment?.name === 'EventCreated'
       );
       const eventId = eventCreatedLog?.args?.[0];
+
+      if (eventId && imagePreview) {
+        localStorage.setItem(`event-image-${eventId}`, imagePreview);
+      }
 
       setTimeout(() => {
         if (eventId) {
@@ -142,6 +155,37 @@ export function CreateEventPage() {
                   required
                   className={inputClass}
                 />
+              </div>
+
+              {/* Image Upload */}
+              <div>
+                <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-zinc-400">
+                  Event Image
+                </label>
+                {imagePreview ? (
+                  <div className="relative rounded-xl overflow-hidden border border-gray-200 dark:border-white/10">
+                    <img src={imagePreview} alt="Event preview" className="w-full h-40 object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => setImagePreview(null)}
+                      className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition-colors hover:bg-black/80"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/[0.02] py-8 transition-colors hover:border-gray-300 dark:hover:border-white/20 hover:bg-gray-100 dark:hover:bg-white/[0.04]">
+                    <ImagePlus className="h-8 w-8 text-gray-400 dark:text-zinc-600" />
+                    <span className="text-sm text-gray-500 dark:text-zinc-500">Click to upload an image</span>
+                    <span className="text-xs text-gray-400 dark:text-zinc-600">PNG, JPG, or WebP</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                  </label>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -295,11 +339,13 @@ export function CreateEventPage() {
 
               {/* Preview card */}
               <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/[0.03]">
-                {/* Gradient banner based on category */}
+                {/* Banner — uploaded image or category gradient */}
                 <div
                   className="relative flex aspect-[3/1] items-end p-4"
                   style={{
-                    background: form.category === 'music'
+                    background: imagePreview
+                      ? undefined
+                      : form.category === 'music'
                       ? 'linear-gradient(135deg, #f43f5e, #f59e0b)'
                       : form.category === 'sports'
                       ? 'linear-gradient(135deg, #f59e0b, #ef4444)'
@@ -312,6 +358,9 @@ export function CreateEventPage() {
                       : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
                   }}
                 >
+                  {imagePreview && (
+                    <img src={imagePreview} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#09090b] via-transparent to-transparent" />
                   {categoryConfig && (
                     <span className="relative z-10 inline-flex items-center gap-1 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-sm">

@@ -73,6 +73,7 @@ export function EventDetails() {
   }
 
   const accentColor = getTicketAccentColor(event.eventId);
+  const storedImage = localStorage.getItem(`event-image-${event.eventId}`);
   const isOrganizer = address.toLowerCase() === event.organizer.toLowerCase();
   const now = Date.now() / 1000;
   const isUpcoming = Number(event.date) > now;
@@ -93,6 +94,13 @@ export function EventDetails() {
         <ArrowLeft className="h-4 w-4" />
         Back to Events
       </Link>
+
+      {/* Event Image Banner */}
+      {storedImage && (
+        <div className="mb-6 overflow-hidden rounded-xl border border-gray-200 dark:border-white/10">
+          <img src={storedImage} alt={event.name} className="w-full h-64 object-cover" />
+        </div>
+      )}
 
       {/* Header */}
       <div className="mb-8">

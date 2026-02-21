@@ -15,6 +15,7 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
   const accentColor = getTicketAccentColor(event.eventId);
   const available = Number(event.maxTickets - event.ticketsSold);
   const soldPercent = Number(event.ticketsSold) / Number(event.maxTickets) * 100;
+  const storedImage = localStorage.getItem(`event-image-${event.eventId}`);
 
   return (
     <motion.div
@@ -27,14 +28,21 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
         className="group block overflow-hidden rounded-xl border border-gray-200 dark:border-white/8 bg-white dark:bg-white/[0.03] shadow-sm dark:shadow-none transition-all duration-300 hover:-translate-y-2 hover:border-gray-300 hover:shadow-md dark:hover:border-white/15 dark:hover:shadow-black/30"
       >
         <div
-          className="flex aspect-[4/3] items-end p-5"
+          className="relative flex aspect-[4/3] items-end p-5"
           style={{
-            background: `linear-gradient(135deg, ${accentColor}15, ${accentColor}05), linear-gradient(to bottom, transparent 50%, #09090b)`,
+            background: storedImage
+              ? undefined
+              : `linear-gradient(135deg, ${accentColor}15, ${accentColor}05), linear-gradient(to bottom, transparent 50%, #09090b)`,
           }}
         >
-          <div className="absolute inset-0 opacity-30" style={{
-            backgroundImage: `radial-gradient(circle at 20% 50%, ${accentColor}30, transparent 60%), radial-gradient(circle at 80% 20%, ${accentColor}20, transparent 50%)`,
-          }} />
+          {storedImage ? (
+            <img src={storedImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+          ) : (
+            <div className="absolute inset-0 opacity-30" style={{
+              backgroundImage: `radial-gradient(circle at 20% 50%, ${accentColor}30, transparent 60%), radial-gradient(circle at 80% 20%, ${accentColor}20, transparent 50%)`,
+            }} />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
         </div>
 
         <div className="space-y-3 p-5">
